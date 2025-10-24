@@ -19,8 +19,210 @@
         }
       ],
       "mvp2Features": []
+    },
+    {
+      "id": "epic-002",
+      "number": "Enrollment-002",
+      "name": "AccountManagement",
+      "description": "Enable clients to manage their account data and account lifecycle",
+      "journey": "REGISTER",
+      "status": "completed",
+      "notes": "Epic v1.3 completed - Data retention updated from 7 days to 30 days",
+      "mvp1Features": [
+        {
+          "number": "Enrollment-002.001",
+          "name": "DataTransparencyRetentionPurging",
+          "description": "Account deletion, data retention (30 days), and purging compliance",
+          "stories": 15,
+          "status": "completed",
+          "notes": "Updated: Data retention changed from 7 days to 30 days"
+        }
+      ],
+      "mvp2Features": []
+    },
+    {
+      "id": "epic-003",
+      "number": "Enrollment-003",
+      "name": "FileUploadIngestion",
+      "description": "Core platform capability for securely uploading, validating, and processing files",
+      "journey": "SCORE (FREE & PAID)",
+      "status": "completed",
+      "notes": "Epic v1.3 completed - All MVP 1 & 2 features documented",
+      "mvp1Features": [
+        {
+          "number": "Enrollment-003.001",
+          "name": "FileUploadManagement",
+          "description": "Secure upload with progress tracking and validation",
+          "stories": 16,
+          "status": "completed",
+          "notes": "v1.1 - PHI attestation and upload flow optimization"
+        },
+        {
+          "number": "Enrollment-003.002",
+          "name": "FileStandardization",
+          "description": "AI-powered file standardization to 834 EDI format",
+          "stories": 23,
+          "status": "completed",
+          "notes": "v3.0 - Documentation Standards optimization with AI field mapping"
+        },
+        {
+          "number": "Enrollment-003.003",
+          "name": "ProgressTrackingNotification",
+          "description": "Real-time progress tracking and email notifications",
+          "stories": 13,
+          "status": "completed",
+          "notes": "v1.2 - Complete progress tracking with dashboard and notifications"
+        }
+      ],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-003.004",
+          "name": "IdentifiedFileUpload",
+          "description": "Identified data upload with PHI handling for Fix tier",
+          "stories": 11,
+          "status": "completed",
+          "notes": "v1.1 - Fix tier PHI file upload with enhanced security"
+        }
+      ]
+    },
+    {
+      "id": "epic-004",
+      "number": "Enrollment-004",
+      "name": "DataQualityScoring",
+      "description": "Comprehensive analysis and scoring of data quality issues",
+      "journey": "SCORE (FREE & PAID)",
+      "status": "completed",
+      "notes": "Epic v1.2 completed - Error detection and scoring dashboard",
+      "mvp1Features": [
+        {
+          "number": "Enrollment-004.001",
+          "name": "ScoringBreakdown",
+          "description": "Detailed scoring dashboard with error categorization",
+          "stories": 20,
+          "status": "completed",
+          "notes": "Comprehensive dashboard with four-category error taxonomy and cost breakdown"
+        }
+      ],
+      "mvp2Features": []
+    },
+    {
+      "id": "epic-005",
+      "number": "Enrollment-005",
+      "name": "AutomatedCorrection",
+      "description": "AI-powered automatic correction of common data quality issues",
+      "journey": "FIX (PAID)",
+      "status": "completed",
+      "notes": "Epic completed - AI correction engine foundation",
+      "mvp1Features": [],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-005.001",
+          "name": "CorrectionEngine",
+          "description": "AI-powered correction generation and validation",
+          "stories": 15,
+          "status": "completed",
+          "notes": "AI correction engine with confidence scoring and validation"
+        }
+      ]
+    },
+    {
+      "id": "epic-006",
+      "number": "Enrollment-006",
+      "name": "CorrectionReviewManagement",
+      "description": "User interface for reviewing and approving AI-generated corrections",
+      "journey": "FIX (PAID)",
+      "status": "completed",
+      "notes": "Epic completed - Complete correction review workflow with toggle interface and transparency",
+      "mvp1Features": [],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-006.001",
+          "name": "FixReviewInterface",
+          "description": "Interactive interface for reviewing and selecting corrections with toggle controls",
+          "stories": 20,
+          "status": "completed",
+          "notes": "v1.1 - Complete toggle interface with Apply fix labels, error category chips, and record-level overrides"
+        },
+        {
+          "number": "Enrollment-006.002",
+          "name": "FixResults",
+          "description": "Post-correction summary with complete error transparency and download options",
+          "stories": 14,
+          "status": "completed",
+          "notes": "v1.2 - Complete error breakdown cards, deselected records table, and dynamic metrics based on user selections"
+        }
+      ]
+    },
+    {
+      "id": "epic-007",
+      "number": "Enrollment-007",
+      "name": "ManualReviewManagement",
+      "description": "Tools for manual correction of complex data quality issues",
+      "journey": "MANAGE (PAID)",
+      "status": "not-started",
+      "notes": "",
+      "mvp1Features": [],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-007.001",
+          "name": "ManualCorrectionInterface",
+          "description": "User interface for manual data correction and validation",
+          "stories": 16,
+          "status": "not-started",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": "epic-008",
+      "number": "Enrollment-008",
+      "name": "FileExportDelivery",
+      "description": "Export and delivery of corrected files in required formats",
+      "journey": "FIX & MANAGE (PAID)",
+      "status": "not-started",
+      "notes": "",
+      "mvp1Features": [],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-008.001",
+          "name": "CorrectedFileExport",
+          "description": "Export corrected 834 EDI files and error reports",
+          "stories": 8,
+          "status": "not-started",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": "epic-009",
+      "number": "Enrollment-009",
+      "name": "ComplianceAuditReporting",
+      "description": "Comprehensive audit trails and compliance reporting",
+      "journey": "ALL TIERS",
+      "status": "not-started",
+      "notes": "",
+      "mvp1Features": [
+        {
+          "number": "Enrollment-009.001",
+          "name": "AuditTrailGeneration",
+          "description": "Comprehensive audit trail capture and storage",
+          "stories": 7,
+          "status": "not-started",
+          "notes": ""
+        }
+      ],
+      "mvp2Features": [
+        {
+          "number": "Enrollment-009.002",
+          "name": "ComplianceReporting",
+          "description": "Regulatory compliance reports and documentation",
+          "stories": 9,
+          "status": "not-started",
+          "notes": ""
+        }
+      ]
     }
   ],
-  "lastUpdated": "2025-10-24T18:09:39.574Z",
+  "lastUpdated": "2025-10-22T00:00:00.000Z",
   "version": "1.0"
 }
