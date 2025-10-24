@@ -1,0 +1,26 @@
+{
+  "epics": [
+    {
+      "id": "epic-001",
+      "number": "Enrollment-001",
+      "name": "AccountCreation",
+      "description": "Enable secure client onboarding and access management",
+      "journey": "REGISTER",
+      "status": "completed",
+      "notes": "Epic v1.3 completed - Consolidated into single feature document",
+      "mvp1Features": [
+        {
+          "number": "Enrollment-001.001",
+          "name": "GuidedOnboardingAccess",
+          "description": "Account creation, login with unique ID, organization pre-population",
+          "stories": 25,
+          "status": "completed",
+          "notes": "Consolidated with 001.002 into single comprehensive feature document"
+        }
+      ],
+      "mvp2Features": []
+    }
+  ],
+  "lastUpdated": "2025-10-24T18:09:39.574Z",
+  "version": "1.0"
+}
