@@ -1,0 +1,25 @@
+@claude Add a filter to show only in-progress features
+@claude Create a sprint planning view that groups features by story points  
+@claude Fix the mobile responsiveness issues on small screens
+@claude Add keyboard shortcuts for common actions
+```
+
+### **🔍 Intelligent Code Reviews**
+```
+@claude Review this PR for accessibility issues
+@claude Check if this change breaks the epic status calculation
+@claude Suggest performance improvements for the data sync
+```
+
+### **🚀 Automated Feature Implementation**
+```
+@claude Implement a dark mode toggle with user preference storage
+@claude Add a velocity calculator based on completed story points over time
+@claude Create a print-friendly CSS layout for progress reports
+```
+
+### **🐛 Instant Bug Resolution**
+```
+@claude The export function isn't working in Safari - can you fix it?
+@claude Status changes aren't saving to GitHub properly
+@claude The progress bar animation is laggy on older browsers
