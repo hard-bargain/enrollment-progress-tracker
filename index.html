@@ -948,11 +948,12 @@
             }
         }
 
-        function cycleStatus(epicId, featureNumber, currentStatus, mvpType) {
+        async function cycleStatus(epicId, featureNumber, currentStatus, mvpType) {
+            console.log('cycleStatus called:', epicId, featureNumber, currentStatus, mvpType);
             const statuses = ['not-started', 'in-progress', 'completed'];
             const currentIndex = statuses.indexOf(currentStatus);
             const nextStatus = statuses[(currentIndex + 1) % statuses.length];
-            updateFeatureStatus(epicId, featureNumber, nextStatus, mvpType);
+            await updateFeatureStatus(epicId, featureNumber, nextStatus, mvpType);
         }
 
         function editNotes(featureNumber) {
@@ -962,9 +963,10 @@
             document.getElementById(`notes-input-${featureNumber}`).focus();
         }
 
-        function saveNotes(epicId, featureNumber, mvpType) {
+        async function saveNotes(epicId, featureNumber, mvpType) {
+            console.log('saveNotes called:', epicId, featureNumber, mvpType);
             const newNotes = document.getElementById(`notes-input-${featureNumber}`).value;
-            updateFeatureNotes(epicId, featureNumber, newNotes, mvpType);
+            await updateFeatureNotes(epicId, featureNumber, newNotes, mvpType);
             cancelEdit(featureNumber);
         }
 
