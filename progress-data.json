@@ -148,7 +148,7 @@
           "name": "FixReviewInterface",
           "description": "Interactive interface for reviewing and selecting corrections with toggle controls",
           "stories": 20,
-          "status": "not-started",
+          "status": "in-progress",
           "notes": "v1.1 - Complete toggle interface with \"Apply fix\" labels, error category chips, and record-level overrides "
         },
         {
@@ -231,6 +231,6 @@
       ]
     }
   ],
-  "lastUpdated": "2025-10-24T21:53:33.825Z",
+  "lastUpdated": "2025-10-24T22:03:09.974Z",
   "version": "1.0"
 }
