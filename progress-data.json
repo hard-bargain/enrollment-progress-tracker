@@ -139,7 +139,7 @@
       "name": "CorrectionReviewManagement",
       "description": "User interface for reviewing and approving AI-generated corrections",
       "journey": "FIX (PAID)",
-      "status": "completed",
+      "status": "in-progress",
       "notes": "Epic completed - Complete correction review workflow with toggle interface and transparency",
       "mvp1Features": [],
       "mvp2Features": [
@@ -167,7 +167,7 @@
       "name": "ManualReviewManagement",
       "description": "Tools for manual correction of complex data quality issues",
       "journey": "MANAGE (PAID)",
-      "status": "not-started",
+      "status": "in-progress",
       "notes": "",
       "mvp1Features": [],
       "mvp2Features": [
@@ -231,6 +231,8 @@
       ]
     }
   ],
-  "lastUpdated": "2025-10-24T22:03:09.974Z",
-  "version": "1.0"
+  "expandedEpics": {
+    "epic-001": true
+  },
+  "lastUpdated": "2025-10-24T23:24:26.781Z"
 }
