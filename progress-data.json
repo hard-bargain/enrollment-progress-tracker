@@ -101,6 +101,14 @@
           "stories": 20,
           "status": "completed",
           "notes": "Comprehensive dashboard with four-category error taxonomy and cost breakdown"
+        },
+        {
+          "number": "Enrollment-004.002",
+          "name": "CostCalculator",
+          "description": "Business cost calculation for data quality issues",
+          "stories": 12,
+          "status": "completed",
+          "notes": "Complete cost impact analysis with industry benchmarks"
         }
       ],
       "mvp2Features": []
@@ -141,7 +149,7 @@
           "description": "Interactive interface for reviewing and selecting corrections with toggle controls",
           "stories": 20,
           "status": "completed",
-          "notes": "v1.1 - Complete toggle interface with Apply fix labels, error category chips, and record-level overrides"
+          "notes": "v1.1 - Complete toggle interface with \"Apply fix\" labels, error category chips, and record-level overrides"
         },
         {
           "number": "Enrollment-006.002",
@@ -215,14 +223,14 @@
         {
           "number": "Enrollment-009.002",
           "name": "ComplianceReporting",
-          "description": "Regulatory compliance reports and documentation",
-          "stories": 9,
+          "description": "Automated compliance reports and regulatory submissions",
+          "stories": 12,
           "status": "not-started",
           "notes": ""
         }
       ]
     }
   ],
-  "lastUpdated": "2025-10-22T00:00:00.000Z",
+  "lastUpdated": "2025-10-24T20:48:59.508Z",
   "version": "1.0"
 }
