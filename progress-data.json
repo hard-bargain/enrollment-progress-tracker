@@ -167,7 +167,7 @@
       "name": "ManualReviewManagement",
       "description": "Tools for manual correction of complex data quality issues",
       "journey": "MANAGE (PAID)",
-      "status": "completed",
+      "status": "not-started",
       "notes": "",
       "mvp1Features": [],
       "mvp2Features": [
@@ -176,7 +176,7 @@
           "name": "ManualCorrectionInterface",
           "description": "User interface for manual data correction and validation",
           "stories": 16,
-          "status": "completed",
+          "status": "not-started",
           "notes": ""
         }
       ]
@@ -236,5 +236,5 @@
     "epic-006": false,
     "epic-007": true
   },
-  "lastUpdated": "2025-10-24T23:28:02.923Z"
+  "lastUpdated": "2025-10-24T23:28:03.996Z"
 }
