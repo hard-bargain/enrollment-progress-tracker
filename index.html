@@ -109,6 +109,12 @@
             font-size: 16px;
             color: #6b7280;
         }
+
+        .icon-github::after {
+            content: '🔗';
+            font-size: 16px;
+            color: #6b7280;
+        }
     </style>
 </head>
 <body>
@@ -157,23 +163,48 @@
             <span className={`icon icon-download ${className}`}></span>
         );
 
-        // GitHub Storage implementation
+        const Github = ({ className }) => (
+            <span className={`icon icon-github ${className}`}></span>
+        );
+
+        // Enhanced GitHub Storage implementation with better error handling
         const createGitHubStorage = () => {
-            let config = JSON.parse(localStorage.getItem('github-config') || '{}');
+            let config = {};
+            
+            // Load config safely
+            try {
+                const savedConfig = localStorage.getItem('github-config');
+                if (savedConfig) {
+                    config = JSON.parse(savedConfig);
+                }
+            } catch (error) {
+                console.warn('Failed to load GitHub config from localStorage:', error);
+                config = {};
+            }
             
             return {
                 async saveConfig(newConfig) {
-                    config = { ...config, ...newConfig };
-                    localStorage.setItem('github-config', JSON.stringify(config));
+                    try {
+                        config = { ...config, ...newConfig };
+                        localStorage.setItem('github-config', JSON.stringify(config));
+                        return true;
+                    } catch (error) {
+                        console.error('Failed to save GitHub config:', error);
+                        throw error;
+                    }
                 },
                 
                 async getConfig() {
                     return config;
                 },
+
+                isConfigured() {
+                    return config.token && config.owner && config.repo;
+                },
                 
                 async save(data) {
-                    if (!config.token || !config.owner || !config.repo) {
-                        throw new Error('GitHub configuration not set');
+                    if (!this.isConfigured()) {
+                        throw new Error('GitHub configuration not set. Please configure GitHub settings first.');
                     }
                     
                     const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.filename || 'progress-data.json'}`;
@@ -191,6 +222,8 @@
                         if (getResponse.ok) {
                             const fileData = await getResponse.json();
                             sha = fileData.sha;
+                        } else if (getResponse.status !== 404) {
+                            throw new Error(`GitHub API error when checking file: ${getResponse.status} ${getResponse.statusText}`);
                         }
                         
                         // Update or create file
@@ -209,7 +242,8 @@
                         });
                         
                         if (!response.ok) {
-                            throw new Error(`GitHub API error: ${response.status}`);
+                            const errorText = await response.text();
+                            throw new Error(`GitHub API error: ${response.status} ${response.statusText} - ${errorText}`);
                         }
                         
                         return true;
@@ -220,8 +254,8 @@
                 },
                 
                 async load() {
-                    if (!config.token || !config.owner || !config.repo) {
-                        throw new Error('GitHub configuration not set');
+                    if (!this.isConfigured()) {
+                        return null; // No config, return null to use defaults
                     }
                     
                     const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.filename || 'progress-data.json'}`;
@@ -235,11 +269,11 @@
                         });
                         
                         if (response.status === 404) {
-                            return null;
+                            return null; // File doesn't exist, use defaults
                         }
                         
                         if (!response.ok) {
-                            throw new Error(`GitHub API error: ${response.status}`);
+                            throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
                         }
                         
                         const data = await response.json();
@@ -261,10 +295,11 @@
             const [saveStatus, setSaveStatus] = useState('');
             const [showSettings, setShowSettings] = useState(false);
             const [githubConfig, setGithubConfig] = useState({});
+            const [showSetupHelp, setShowSetupHelp] = useState(false);
             
             const storage = createGitHubStorage();
 
-            // Default epic data structure
+            // Default epic data structure (same as before)
             const defaultEpics = [
                 {
                     id: 'epic-001',
@@ -526,14 +561,30 @@
                 try {
                     const config = await storage.getConfig();
                     setGithubConfig(config);
+                    
+                    // Show setup help if no config
+                    if (!storage.isConfigured()) {
+                        setShowSetupHelp(true);
+                    }
                 } catch (error) {
                     console.error('Failed to load GitHub config:', error);
+                    setShowSetupHelp(true);
                 }
             };
 
             const loadData = async () => {
                 try {
                     setSaveStatus('Loading...');
+                    
+                    if (!storage.isConfigured()) {
+                        // No GitHub config, use defaults
+                        const epicsWithStatus = updateEpicsWithCalculatedStatus(defaultEpics);
+                        setEpics(epicsWithStatus);
+                        setSaveStatus('📝 Local mode - Configure GitHub to sync');
+                        setLoading(false);
+                        return;
+                    }
+
                     const data = await storage.load();
                     
                     if (data && data.epics) {
@@ -545,13 +596,18 @@
                         const epicsWithStatus = updateEpicsWithCalculatedStatus(defaultEpics);
                         setEpics(epicsWithStatus);
                         setSaveStatus('📝 Using default data');
-                        await saveData(epicsWithStatus, {});
+                        // Try to save defaults to GitHub
+                        try {
+                            await saveData(epicsWithStatus, {});
+                        } catch (saveError) {
+                            console.warn('Could not save default data to GitHub:', saveError);
+                        }
                     }
                 } catch (error) {
                     console.error('Load failed:', error);
                     const epicsWithStatus = updateEpicsWithCalculatedStatus(defaultEpics);
                     setEpics(epicsWithStatus);
-                    setSaveStatus('❌ Failed to load from GitHub - using local data');
+                    setSaveStatus('❌ GitHub load failed - using local data');
                 } finally {
                     setLoading(false);
                 }
@@ -559,6 +615,12 @@
 
             const saveData = async (epicsData, expandedData) => {
                 try {
+                    if (!storage.isConfigured()) {
+                        setSaveStatus('⚠️ Local mode - Configure GitHub to sync');
+                        setTimeout(() => setSaveStatus(''), 3000);
+                        return;
+                    }
+
                     setSaveStatus('Saving...');
                     const dataToSave = {
                         epics: epicsData,
@@ -572,7 +634,7 @@
                     setTimeout(() => setSaveStatus(''), 3000);
                 } catch (error) {
                     console.error('Save failed:', error);
-                    setSaveStatus('❌ Save failed');
+                    setSaveStatus(`❌ Save failed: ${error.message}`);
                     setTimeout(() => setSaveStatus(''), 5000);
                 }
             };
@@ -668,9 +730,18 @@
             };
 
             const saveGitHubConfig = async (config) => {
-                await storage.saveConfig(config);
-                setGithubConfig(config);
-                setShowSettings(false);
+                try {
+                    await storage.saveConfig(config);
+                    setGithubConfig(config);
+                    setShowSettings(false);
+                    setShowSetupHelp(false);
+                    
+                    // Try to reload data from GitHub with new config
+                    loadData();
+                } catch (error) {
+                    console.error('Failed to save GitHub config:', error);
+                    setSaveStatus('❌ Failed to save GitHub config');
+                }
             };
 
             const exportData = () => {
@@ -703,6 +774,33 @@
 
             return (
                 <div className="max-w-7xl mx-auto p-6 bg-gray-50">
+                    {/* Setup Help Banner */}
+                    {showSetupHelp && (
+                        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h3 className="font-semibold text-blue-900 mb-2">🚀 Setup GitHub Sync (Optional)</h3>
+                                    <p className="text-blue-800 text-sm">
+                                        Your tracker works locally! To sync with GitHub and enable team sharing, 
+                                        <button 
+                                            onClick={() => setShowSettings(true)}
+                                            className="underline mx-1 hover:text-blue-600"
+                                        >
+                                            configure GitHub settings
+                                        </button>
+                                        (you'll need a personal access token).
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={() => setShowSetupHelp(false)}
+                                    className="text-blue-600 hover:text-blue-800"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Header */}
                     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
                         <div className="flex items-center justify-between mb-4">
@@ -730,10 +828,19 @@
                                 <button
                                     onClick={() => setShowSettings(true)}
                                     className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
-                                    title="Settings"
+                                    title="GitHub Settings"
                                 >
                                     <Settings className="w-5 h-5" />
                                 </button>
+                                {storage.isConfigured() && (
+                                    <button
+                                        onClick={loadData}
+                                        className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
+                                        title="Reload from GitHub"
+                                    >
+                                        <Github className="w-5 h-5" />
+                                    </button>
+                                )}
                             </div>
                         </div>
                         
@@ -760,12 +867,12 @@
                         <ul className="list-disc list-inside text-amber-800 space-y-1 text-sm">
                             <li><strong>Dynamic Epic Status:</strong> Epic status now automatically updates based on feature completion</li>
                             <li><strong>Fixed Accordion Behavior:</strong> Status changes no longer collapse accordions</li>
-                            <li><strong>GitHub Integration:</strong> All changes automatically sync to your repository</li>
-                            <li><strong>Custom Icons:</strong> Replaced external icon library with reliable custom icons</li>
+                            <li><strong>Robust Error Handling:</strong> Works offline and gracefully handles GitHub setup</li>
+                            <li><strong>Local Mode:</strong> Full functionality without GitHub configuration</li>
                         </ul>
                     </div>
 
-                    {/* Epics */}
+                    {/* Epics - Same structure as before, just passing through the icon functions */}
                     <div className="space-y-4">
                         {epics.map((epic) => (
                             <div key={epic.id} className="bg-white rounded-lg shadow-sm border">
@@ -918,14 +1025,19 @@
                     {/* Footer */}
                     <div className="mt-6 text-center text-sm text-gray-500">
                         <p>Last Updated: {new Date().toLocaleDateString()}</p>
-                        <p className="mt-1">Enhanced Version - Fixed Library Dependencies</p>
-                        <p className="mt-1">💾 All changes automatically synced to GitHub</p>
+                        <p className="mt-1">Enhanced Version with Robust Error Handling</p>
+                        <p className="mt-1">
+                            {storage.isConfigured() ? 
+                                '💾 Synced with GitHub' : 
+                                '📱 Local mode - Click settings to setup GitHub sync'
+                            }
+                        </p>
                     </div>
                 </div>
             );
         };
 
-        // Feature Card Component
+        // Feature Card Component (same as before but with passed functions)
         const FeatureCard = ({ 
             feature, 
             epicId, 
@@ -994,7 +1106,6 @@
                         </div>
                     </div>
                     
-                    {/* Notes Section */}
                     <div className="mt-2">
                         {isEditing ? (
                             <div className="flex items-start space-x-2">
@@ -1062,6 +1173,15 @@
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 w-full max-w-md">
                         <h2 className="text-lg font-semibold mb-4">GitHub Configuration</h2>
+                        <div className="mb-4 p-3 bg-blue-50 rounded text-sm text-blue-800">
+                            <strong>Setup Instructions:</strong>
+                            <ol className="list-decimal list-inside mt-2 space-y-1">
+                                <li>Create a GitHub repository (if you haven't already)</li>
+                                <li>Go to GitHub Settings → Developer Settings → Personal Access Tokens</li>
+                                <li>Create a token with "repo" permissions</li>
+                                <li>Fill in the form below</li>
+                            </ol>
+                        </div>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1127,7 +1247,7 @@
                                     type="submit"
                                     className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
                                 >
-                                    Save
+                                    Save & Connect
                                 </button>
                             </div>
                         </form>
