@@ -232,7 +232,8 @@
     }
   ],
   "expandedEpics": {
-    "epic-001": false
+    "epic-001": false,
+    "epic-006": true
   },
-  "lastUpdated": "2025-10-24T23:27:51.501Z"
+  "lastUpdated": "2025-10-24T23:27:54.460Z"
 }
