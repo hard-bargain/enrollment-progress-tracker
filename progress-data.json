@@ -149,7 +149,7 @@
           "description": "Interactive interface for reviewing and selecting corrections with toggle controls",
           "stories": 20,
           "status": "completed",
-          "notes": "v1.1 - Complete toggle interface with \"Apply fix\" labels, error category chips, and record-level overrides"
+          "notes": "v1.1 - Complete toggle interface with \"Apply fix\" labels, error category chips, and record-level overrides "
         },
         {
           "number": "Enrollment-006.002",
@@ -231,6 +231,6 @@
       ]
     }
   ],
-  "lastUpdated": "2025-10-24T20:50:12.463Z",
+  "lastUpdated": "2025-10-24T20:50:18.761Z",
   "version": "1.0"
 }
